@@ -1,0 +1,8 @@
+.menu {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  border-bottom: 1px #545454 solid;
+  margin: 40px auto 0;
+  padding-bottom: 40px;
+}

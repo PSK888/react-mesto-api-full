@@ -1,0 +1,9 @@
+.menu__open {
+  display: flex;
+}
+
+@media screen and (min-width: 471px) {
+  .menu__open {
+    display: none;
+  }
+}

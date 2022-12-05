@@ -1,0 +1,5 @@
+.popup__cardcontainer {
+    margin: auto;
+    max-width: 1280px;
+    position: relative;
+}

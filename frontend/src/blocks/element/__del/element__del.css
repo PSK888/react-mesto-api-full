@@ -1,0 +1,19 @@
+.element__del {
+    position: absolute;
+    margin: 20px 20px 0 244px;
+    padding: 0;
+    width: 18px;
+    height: 19px;
+    background-color: rgba(255, 255, 255, 0);
+    background-image: url(../../../images/Del.svg);
+    border: none;
+    background-repeat: no-repeat;
+    background-position: center;
+    transition: 0.3s;
+    z-index: 2;
+}
+
+.element__del:hover {
+    opacity: 0.4;
+    cursor: pointer;
+}

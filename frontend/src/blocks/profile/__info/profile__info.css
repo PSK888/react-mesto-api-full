@@ -1,0 +1,16 @@
+.profile__info {
+  margin-left: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  max-width: 336px;
+  /*Исправил 550px на 336px по макету, но тогда не возможно написать полное ФИО, т.к. текст крупноват. 
+    На мой взгляд это неправильно, если страница не ломается, почему бы и нет? Мож я и не прав конечно =) */
+}
+
+@media screen and (max-width: 940px) {
+  .profile__info {
+    max-width: 282px;
+    margin-left: 0px;
+  }
+}

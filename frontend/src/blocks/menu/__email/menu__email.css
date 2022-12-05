@@ -1,0 +1,11 @@
+.menu__email {
+  margin: 0 0 18px;
+  padding: 0;
+  color: white;
+  align-self: center;
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 22px;
+}
