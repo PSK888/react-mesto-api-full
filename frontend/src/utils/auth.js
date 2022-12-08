@@ -1,4 +1,4 @@
-const BASE_URL = 'https://auth.nomoreparties.co';
+const BASE_URL = 'https://api.psk888.students.nomoredomains.club';
 
 const handleResponse = async (data) => {
   const res = await data.json()
@@ -29,6 +29,7 @@ export async function login(email, password) {
     headers: {
       "Content-Type": "application/json"
     },
+    credentials: 'include',
     body: JSON.stringify({
       email,
       password

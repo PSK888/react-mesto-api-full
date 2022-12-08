@@ -7,9 +7,6 @@ const routerUsers = require('./users');
 const routerCards = require('./cards');
 const { REGEX } = require('../utils/constants');
 
-router.use('/users', auth, routerUsers);
-router.use('/cards', auth, routerCards);
-
 router.post('/signin', celebrate({
   body: Joi.object().keys({
     email: Joi.string().required().email(),
@@ -26,6 +23,9 @@ router.post('/signup', celebrate({
     avatar: Joi.string().pattern(REGEX),
   }),
 }), createUser);
+
+router.use('/users', auth, routerUsers);
+router.use('/cards', auth, routerCards);
 
 router.use(auth, (req, res, next) => {
   next(new NotFoundError('Запрошенный ресурс не найден'));
