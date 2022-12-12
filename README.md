@@ -8,7 +8,7 @@
 ## Запуск проекта:
 * Frontend: https://psk888.students.nomoredomains.club;
 * Backend: https://api.psk888.students.nomoredomains.club;
-* Публичный IP: 51.250.23.182 ;
+* Публичный IP: 51.250.68.120 
 
 ---
 ## *Функциональность:*
