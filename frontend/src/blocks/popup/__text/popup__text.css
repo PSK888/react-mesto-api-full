@@ -1,9 +1,9 @@
 .popup__text {
     max-width: 358px;
-    margin: 0 auto 60px;
+    margin: 0 0 0 23px;
     color: black;
     background-color: none;
     font-size: 24px;
     font-weight: 900;
-    text-align: center;
+    line-height: 29px;
 }

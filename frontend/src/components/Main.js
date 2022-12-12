@@ -1,8 +1,16 @@
 import { useContext } from "react";
-import { CurrentUserContext } from "../contexts/CurrentUserContext.js";
-import Card from "./Card.js";
 
-function Main(props) {
+import Card from "./Card.js";
+import { CurrentUserContext } from "../contexts/CurrentUserContext.js";
+
+function Main({ onEditAvatar,
+    onAddPlace,
+    onEditProfile,
+    onCardClick,
+    cards,
+    onCardLike,
+    onCardDelete,
+}) {
     const currentUser = useContext(CurrentUserContext);
 
     return (
@@ -13,7 +21,7 @@ function Main(props) {
                         <div
                             className="profile__avatar"
                             style={{ backgroundImage: `url(${currentUser.avatar})` }}
-                            onClick={props.onEditAvatar} />
+                            onClick={onEditAvatar} />
                     </div>
                     <div className="profile__info">
                         <div className="profile__personal">
@@ -22,7 +30,7 @@ function Main(props) {
                                 aria-label="Open editForm"
                                 className="profile__edit-button"
                                 type="button"
-                                onClick={props.onEditProfile} />
+                                onClick={onEditProfile} />
                         </div>
                         <p className="profile__job">{currentUser.about}</p>
                     </div>
@@ -30,12 +38,17 @@ function Main(props) {
                 <button
                     type="button"
                     className="profile__add-button"
-                    onClick={props.onAddPlace} />
+                    onClick={onAddPlace} />
             </section>
 
             <section className="elements">
-                {props.cards.map((card) => (
-                    <Card key={card._id} card={card} onCardClick={props.onCardClick} onCardDelete={props.onCardDelete} onCardLike={props.onCardLike} />
+                {cards.map(card => (
+                    <Card
+                        key={card._id}
+                        card={card}
+                        onCardClick={onCardClick}
+                        onCardDelete={onCardDelete}
+                        onCardLike={onCardLike} />
                 ))}
             </section>
         </main>

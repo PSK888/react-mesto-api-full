@@ -1,54 +1,40 @@
 const BASE_URL = 'https://api.psk888.students.nomoredomains.club';
 
-const handleResponse = async (data) => {
-  const res = await data.json()
-  if (data.ok) {
-    return res
-  } else {
-    return Promise.reject(res);
+const handleResponse = res => {
+  if (res.ok) {
+    return res.json();
   }
-}
+  return Promise.reject(`Ошибка: ${res.status}`);
+};
 
-export async function register(email, password) {
-  const data = await fetch(`${BASE_URL}/signup`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      email,
-      password
-    })
+export const register = (email, password) => {
+  return fetch(`${BASE_URL}/signup`, {
+    method: 'POST',
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ password, email })
   })
-  return handleResponse(data);
-}
+  .then(handleResponse)
+};
 
-export async function login(email, password) {
-  const data = await fetch(`${BASE_URL}/signin`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    credentials: 'include',
-    body: JSON.stringify({
-      email,
-      password
-    })
+export const login = (email, password) => {
+  return fetch(`${BASE_URL}/signin`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ password, email })
   })
-  return handleResponse(data);
-}
+  .then(handleResponse)
+};
 
-
-export async function checkToken(token) {
-  const data = await fetch(`${BASE_URL}/users/me`, {
-    method: "GET",
+export const checkToken = jwt => {
+  return fetch(`${BASE_URL}/users/me`, {
+    method: 'GET',
     headers: {
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${token}`
+      'Content-Type': 'application/json',
+      "Authorization" : `Bearer ${jwt}`
     }
   })
-  return handleResponse(data);
-}
+  .then(handleResponse)
+};
 
 
 

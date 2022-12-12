@@ -1,4 +1,5 @@
 import api from "../utils/api.js";
+import * as auth from '../utils/auth.js';
 import { useEffect, useState } from "react";
 import { CurrentUserContext } from "../contexts/CurrentUserContext.js";
 import { Route, Routes, useNavigate } from 'react-router-dom';
@@ -12,7 +13,6 @@ import ImagePopup from "./ImagePopup.js";
 import Register from "./Register.js";
 import Login from "./Login.js";
 import ProtectedRoute from "./ProtectedRoute.js";
-import * as auth from '../utils/auth.js';
 import InfoTooltip from "./InfoTooltip.js";
 
 function App() {
@@ -53,11 +53,42 @@ function App() {
     setIsInfoTooltipOpen(false)
   };
 
+  useEffect(() => {
+    const jwt = localStorage.getItem('jwt');
+    if (jwt) {
+      auth.checkToken(jwt)
+        .then((data) => {
+          setCurrentEmail(data.email);
+          setLoggedIn(true);
+          navigate('/');
+        })
+        .catch((err) => {
+          console.log(err);
+          setLoggedIn(false);
+        });
+    }
+  }, [navigate])
+
+  useEffect(() => {
+    if (loggedIn) {
+      Promise.all([api.getUser(), api.getInitialCards()])
+        .then(([userData, cards]) => {
+          setCurrentUser(userData);
+          setCards(cards);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }, [loggedIn]);
+
+
   function handleCardLike(card) {
-    const isLiked = card.likes.some(i => i._id === currentUser._id);
-    api.changeLikeCardStatus(card._id, !isLiked)
+    const isLiked = card.likes.some(i => i === currentUser._id);
+
+    api.changeLikeCardStatus(card._id, isLiked)
       .then((newCard) => {
-        setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
+        setCards((state) => state.map(c => (c._id === card._id ? newCard.data : c)));
       })
       .catch((err) => {
         console.log(err);
@@ -67,7 +98,7 @@ function App() {
   function handleCardDelete(card) {
     api.deleteIdCard(card)
       .then(() => {
-        setCards(cards.filter((c) => c._id !== card._id));
+        setCards(cards.filter((c) => c !== card));
       })
       .catch((err) => {
         console.log(err);
@@ -111,7 +142,7 @@ function App() {
     auth.register(email, password).then((res) => {
       setSuccess(true);
       setIsInfoTooltipOpen(true);
-      navigate('/');
+      navigate('/signin');
     }).catch((e) => {
       console.log(e);
       setSuccess(false);
@@ -121,10 +152,10 @@ function App() {
 
   function handleLogin(email, password) {
     auth.login(email, password)
-      .then((data) => {
-        setLoggedIn(true)
-        setCurrentEmail(email)
-        localStorage.setItem('token', data.token);
+      .then(jwt => {
+        setLoggedIn(true);
+        setCurrentEmail(email);
+        localStorage.setItem('jwt', jwt.token);
         navigate('/');
       })
       .catch((e) => {
@@ -135,7 +166,7 @@ function App() {
   }
 
   function handleLogout() {
-    localStorage.removeItem('token');
+    localStorage.removeItem('jwt');
     navigate('/sign-in');
     setCurrentEmail('');
     setLoggedIn(false);
@@ -147,35 +178,6 @@ function App() {
       setIsUserMenuOpen(!isUserMenuOpen)
     }
   }
-
-  useEffect(() => {
-    const jwt = localStorage.getItem('token');
-    if (jwt) {
-      auth.checkToken(jwt).
-        then(({ data }) => {
-          setCurrentEmail(data.email);
-          setLoggedIn(true);
-          navigate('/');
-        })
-        .catch((err) => {
-          console.log(err);
-          setLoggedIn(false);
-        });
-    }
-  }, [])
-
-  useEffect(() => {
-    if (loggedIn) {
-      Promise.all([api.getUser(), api.getInitialCards()])
-        .then(([userData, cards]) => {
-          setCurrentUser(userData);
-          setCards(cards);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-  }, [loggedIn]);
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
