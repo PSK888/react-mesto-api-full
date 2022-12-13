@@ -13,7 +13,6 @@ const { requestLogger, errorLogger } = require('./middlewares/logger');
 const { PORT = 3000 } = process.env;
 const limiter = expressRateLimit({ windowMs: 10 * 60 * 1000, max: 1000 });
 const app = express();
-const mongoDB = 'mongodb://localhost:27017/mestodb';
 const routes = require('./routes/index');
 const errorHandler = require('./middlewares/error-handler');
 
@@ -27,7 +26,7 @@ app.use(cookieParser());
 
 app.use(express.json()); // для собирания JSON-формата
 
-mongoose.connect(mongoDB);
+mongoose.connect(process.env.DB_CONN);
 
 app.use(requestLogger); // подключаем логгер запросов
 
