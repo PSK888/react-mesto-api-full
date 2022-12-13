@@ -142,7 +142,7 @@ function App() {
     auth.register(email, password).then((res) => {
       setSuccess(true);
       setIsInfoTooltipOpen(true);
-      navigate('/signin');
+      navigate('/');
     }).catch((e) => {
       console.log(e);
       setSuccess(false);

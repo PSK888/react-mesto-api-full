@@ -23,7 +23,7 @@ const createCard = (req, res, next) => {
     });
 };
 
-const deleteCardById = (req, res, next) => {
+function deleteCardById(req, res, next) {
   Card.findById(req.params.cardId)
     .orFail(() => next(new NotFoundError('Карточка не найдена')))
     .then((card) => {
@@ -42,7 +42,7 @@ const deleteCardById = (req, res, next) => {
         next(err);
       }
     });
-};
+}
 
 const likeCard = (req, res, next) => {
   Card.findByIdAndUpdate(

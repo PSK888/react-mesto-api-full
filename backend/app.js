@@ -1,35 +1,27 @@
 require('dotenv').config();
 
-console.log(process.env.NODE_ENV); // production
-
 const express = require('express');
 
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
+const helmet = require('helmet');
 const mongoose = require('mongoose');
+const expressRateLimit = require('express-rate-limit');
 const { errors } = require('celebrate');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 const { PORT = 3000 } = process.env;
+const limiter = expressRateLimit({ windowMs: 10 * 60 * 1000, max: 1000 });
 const app = express();
 const mongoDB = 'mongodb://localhost:27017/mestodb';
 const routes = require('./routes/index');
 const errorHandler = require('./middlewares/error-handler');
 
-const corsOptions = {
-  origin: [
-    'http://localhost:3000',
-    'https://psk888.students.nomoredomains.club',
-    'http://psk888.students.nomoredomains.club',
-  ],
-  methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
-  preflightContinue: false,
-  optionsSuccessStatus: 204,
-  allowedHeaders: ['Content-Type', 'origin', 'Authorization'],
-  credentials: true,
-};
+app.use(cors()); // ПЕРВЫМ!
 
-app.use(cors(corsOptions)); // ПЕРВЫМ!
+app.use(helmet());
+
+app.use(limiter);
 
 app.use(cookieParser());
 
@@ -53,7 +45,4 @@ app.use(errors()); // подключаем обработчик ошибок cel
 
 app.use(errorHandler); // подключаем централизованный обработчик ошибок
 
-app.listen(PORT, () => {
-  // eslint-disable-next-line no-console
-  console.log(`App listening port ${PORT}`);
-});
+app.listen(PORT, () => { console.log(`App listening port ${PORT}`); });

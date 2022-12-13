@@ -1,6 +1,6 @@
 .popup__text {
     max-width: 358px;
-    margin: 0 0 0 23px;
+    margin: 0 auto 23px;
     color: black;
     background-color: none;
     font-size: 24px;
